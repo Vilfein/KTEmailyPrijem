@@ -1,0 +1,56 @@
+import javax.mail.*
+import java.util.Properties
+
+
+
+fun main() {
+    // Nastavení vlastností pro připojení k emailovému serveru
+    val properties = Properties()
+    properties["mail.store.protocol"] = "pop3"
+    properties["mail.pop3.host"] = "pop3.forpsi.com"
+    properties["mail.pop3.port"] = "995"
+    properties["mail.pop3.ssl.enable"] = "true"
+    properties["mail.pop3.ssl.trust"] = "*"
+    try {
+        // Připojení k emailovému serveru
+        val session: Session = Session.getDefaultInstance(properties)
+        val store: Store = session.getStore("pop3")
+        store.connect("vasek@vasekdoskar.cz", "Q5fVk_fWFf")
+
+        // Získání složky INBOX
+        val folder: Folder = store.getFolder("INBOX")
+        folder.open(Folder.READ_ONLY)
+
+        // Získání pole zpráv
+        val messages: Array<Message> = folder.getMessages()
+
+
+        // Procházení zpráv
+        for (message in messages) {
+            var obsah = ""
+//            val from = message.getFrom()
+//            val sub = message.getSubject()
+            val content = message.getContent()
+            if (content is String) obsah = content else if (content is Multipart) {
+                val multipart: Multipart = content
+                val partCount: Int = multipart.getCount()
+                for (i in 0 until partCount) {
+                    val part: BodyPart = multipart.getBodyPart(i)
+                    if (part.isMimeType("text/plain")) {
+                        obsah = "Content: " + part.getContent()
+                    }
+                }
+            }
+            System.out.println("From: " + message.getFrom().get(0))
+            System.out.println("Subject: " + message.getSubject())
+            println("Content: $obsah")
+            println("--------------------------")
+        }
+
+        // Uzavření spojení
+        folder.close(false)
+        store.close()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
