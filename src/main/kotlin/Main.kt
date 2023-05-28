@@ -6,15 +6,15 @@ import java.util.Properties
 fun main() {
     // Nastavení vlastností pro připojení k emailovému serveru
     val properties = Properties()
-    properties["mail.store.protocol"] = "pop3"
-    properties["mail.pop3.host"] = "pop3.forpsi.com"
-    properties["mail.pop3.port"] = "995"
-    properties["mail.pop3.ssl.enable"] = "true"
-    properties["mail.pop3.ssl.trust"] = "*"
+    properties["mail.store.protocol"] = "imaps"
+    properties["mail.imaps.host"] = "imap.forpsi.com"
+    properties["mail.imaps.port"] = "993"
+    properties["mail.imaps.ssl.enable"] = "true"
+    properties["mail.imaps.ssl.trust"] = "*"
     try {
         // Připojení k emailovému serveru
         val session: Session = Session.getDefaultInstance(properties)
-        val store: Store = session.getStore("pop3")
+        val store: Store = session.getStore("imaps")
         store.connect("vasek@vasekdoskar.cz", "Q5fVk_fWFf")
 
         // Získání složky INBOX
