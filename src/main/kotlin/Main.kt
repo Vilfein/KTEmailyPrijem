@@ -3,7 +3,7 @@ import java.util.Properties
 
 
 
-fun main() {
+fun ReadMails(){
     // Nastavení vlastností pro připojení k emailovému serveru
     val properties = Properties()
     properties["mail.store.protocol"] = "imaps"
@@ -22,8 +22,7 @@ fun main() {
         folder.open(Folder.READ_ONLY)
 
         // Získání pole zpráv
-        val messages: Array<Message> = folder.getMessages()
-
+        val messages: Array<Message> = folder.messages
 
         // Procházení zpráv
         for (message in messages) {
@@ -54,3 +53,9 @@ fun main() {
         e.printStackTrace()
     }
 }
+
+
+fun main() {
+    ReadMails()
+}
+
